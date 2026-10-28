@@ -98,7 +98,7 @@ public class SampleService(ISampleRepository repository) : ISampleService
         if (!allowedStatuses.Contains(newStatus))
             throw new ConflictException($"No se puede cambiar el estado de '{currentStatus}' a '{newStatus}'.");
 
-        // 3. El motivo solo se guarda cuando se rechaza (el DTO ya comprobó que viene)
+        // 3. El motivo solo se guarda cuando se rechaza 
         string? rejectionReason = null;
         if (newStatus == "Rechazada")
             rejectionReason = request.RejectionReason!.Trim();

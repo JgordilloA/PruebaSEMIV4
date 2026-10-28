@@ -51,8 +51,7 @@ public class SampleRepository(IConfiguration config) : ISampleRepository
         return sampleId;
     }
 
-    // UPDLOCK + HOLDLOCK bloquean la fila hasta terminar la transacción,
-    // así dos solicitudes simultáneas con el mismo documento no crean pacientes duplicados
+
     private static Task<int?> FindPatientIdAsync(SqlConnection connection, SqlTransaction transaction, int documentNumber)
     {
         const string sql = @"
@@ -96,7 +95,6 @@ public class SampleRepository(IConfiguration config) : ISampleRepository
 
     public async Task<SampleDetail?> GetByIdAsync(int id)
     {
-        // Dos consultas en un solo viaje a la base: primero la muestra, luego sus exámenes
         const string sql = @"
             SELECT s.IdSample AS Id,
                    CAST(p.DocumentNumber AS nvarchar(12)) AS DocumentNumber,
@@ -129,7 +127,7 @@ public class SampleRepository(IConfiguration config) : ISampleRepository
 
     public async Task<(List<SampleListItem> Items, int Total)> GetPageAsync(int page, int pageSize)
     {
-        // La paginación se hace en SQL con OFFSET/FETCH (no en memoria).
+        // La paginación se hace en SQL con OFFSET/FETCH.
         // Se ordena también por Id para que fechas iguales no cambien el orden entre páginas.
         const string sql = @"
             SELECT s.IdSample AS Id,

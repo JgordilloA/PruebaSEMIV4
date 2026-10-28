@@ -44,4 +44,5 @@ insert into Test (CodeTest,NameTest) Values
 ('VIH','SIDA'),
 ('VPH','PAPILOMA');
 
-select * from Test
+select * from SampleTest
+DELETE FROM SampleTest WHERE SampleId = 14;
